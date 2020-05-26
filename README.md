@@ -24,7 +24,7 @@ public class TestApplication {
 ```
 ```java
 @Component
-public class ZobReceiveTask {
+public class TestTask {
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Scheduled(cron = "0/2 * * * * ?")
