@@ -5,6 +5,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
@@ -29,15 +31,17 @@ public class SuperScheduledManager {
     /**
      * 查询所有启动的Scheduled
      */
-    public Set<String> getRunScheduledName() {
-        return superScheduledConfig.getNameToScheduledFuture().keySet();
+    public List<String> getRunScheduledName() {
+        Set<String> names = superScheduledConfig.getNameToScheduledFuture().keySet();
+        return new ArrayList<>(names);
     }
 
     /**
      * 查询所有的Scheduled
      */
-    public Set<String> getAllSuperScheduledName() {
-        return superScheduledConfig.getNameToRunnable().keySet();
+    public List<String> getAllSuperScheduledName() {
+        Set<String> names =  superScheduledConfig.getNameToRunnable().keySet();
+        return new ArrayList<>(names);
     }
 
     /**
