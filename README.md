@@ -1,5 +1,5 @@
 # SpringBoot的定时任务的加强工具
-SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全兼容原生springScheduled无需对原本的定时任务进行修改
+SpringBoot的定时任务的加强工具，实现定时任务动态管理,兼容原生springScheduled无需对原本的定时任务进行修改
 
 ## 引入jar包
 导入项目 &emsp;&emsp;`maven仓库正在审核`
@@ -76,6 +76,7 @@ public class TestApplicationTests {
 
 
 ## 后续计划
+* 完成springScheduled全兼容，目前只兼容cron
 * 后续加入可视化管理
 * 调度日志
 * 集群任务统一管理
