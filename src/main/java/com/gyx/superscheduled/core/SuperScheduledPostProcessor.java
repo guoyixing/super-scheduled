@@ -1,6 +1,8 @@
 package com.gyx.superscheduled.core;
 
+import com.gyx.superscheduled.enums.ScheduledType;
 import com.gyx.superscheduled.exception.SuperScheduledException;
+import com.gyx.superscheduled.model.ScheduledSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
@@ -43,13 +45,20 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
                 if (annotation == null) {
                     continue;
                 }
-                if (StringUtils.isEmpty(annotation.cron())) {
-                    throw new SuperScheduledException("在" + beanName + "Bean中，存在缺少cron参数的SuperSchedule");
+                ScheduledSource scheduledSource = new ScheduledSource(annotation);
+                if (!scheduledSource.check()) {
+                    throw new SuperScheduledException("在" + beanName + "Bean中"+method.getName()+"方法的注解参数错误");
                 }
                 String name = beanName + "#" + method.getName();
-                superScheduledConfig.addCronTrigger(name, new CronTrigger(annotation.cron()));
+                superScheduledConfig.addScheduledSource(name, scheduledSource);
                 try {
                     changeAnnotationValue(annotation, "cron", Scheduled.CRON_DISABLED);
+                    changeAnnotationValue(annotation, "fixedDelay", -1L);
+                    changeAnnotationValue(annotation, "fixedDelayString", "");
+                    changeAnnotationValue(annotation, "fixedRate", -1L);
+                    changeAnnotationValue(annotation, "fixedRateString", "");
+                    changeAnnotationValue(annotation, "initialDelay", -1L);
+                    changeAnnotationValue(annotation, "initialDelayString", "");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -64,6 +73,7 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
         }
         return bean;
     }
+
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

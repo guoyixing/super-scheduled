@@ -1,5 +1,6 @@
 package com.gyx.superscheduled.core;
 
+import com.gyx.superscheduled.model.ScheduledSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -15,24 +16,33 @@ import java.util.concurrent.ScheduledFuture;
 public class SuperScheduledConfig {
     protected final Log logger = LogFactory.getLog(getClass());
 
+    /**
+     * 执行定时任务的线程池
+     */
     private ThreadPoolTaskScheduler taskScheduler;
 
+    /**
+     * 定时任务名称与定时任务回调钩子  的关联关系容器
+     */
     private Map<String, ScheduledFuture> nameToScheduledFuture = new ConcurrentHashMap<>();
 
+    /**
+     * 定时任务名称与定时任务需要执行的逻辑  的关联关系容器
+     */
     private Map<String, Runnable> nameToRunnable = new ConcurrentHashMap<>();
 
-    private Map<String, CronTrigger> nameToCronTrigger = new ConcurrentHashMap<>();
+    /**
+     * 定时任务名称与定时任务的源信息  的关联关系容器
+     */
+    private Map<String, ScheduledSource> nameToScheduledSource = new ConcurrentHashMap<>();
 
-    public CronTrigger getCronTrigger(String name){
-        return nameToCronTrigger.get(name);
+
+    public void addScheduledSource(String name,ScheduledSource scheduledSource){
+        this.nameToScheduledSource.put(name,scheduledSource);
     }
 
-    public void setScheduledFuture(String name,ScheduledFuture scheduledFuture){
-        this.nameToScheduledFuture.put(name,scheduledFuture);
-    }
-
-    public void setCronTrigger(String name,CronTrigger cronTrigger){
-        this.nameToCronTrigger.put(name,cronTrigger);
+    public ScheduledSource getScheduledSource(String name){
+        return nameToScheduledSource.get(name);
     }
 
     public Runnable getRunnable(String name){
@@ -49,10 +59,6 @@ public class SuperScheduledConfig {
 
     public void addRunnable(String name, Runnable runnable) {
         this.nameToRunnable.put(name, runnable);
-    }
-
-    public void addCronTrigger(String name, CronTrigger cronTrigger) {
-        this.nameToCronTrigger.put(name, cronTrigger);
     }
 
     public ThreadPoolTaskScheduler getTaskScheduler() {
@@ -79,15 +85,15 @@ public class SuperScheduledConfig {
         this.nameToRunnable = nameToRunnable;
     }
 
-    public Map<String, CronTrigger> getNameToCronTrigger() {
-        return nameToCronTrigger;
-    }
-
-    public void setNameToCronTrigger(Map<String, CronTrigger> nameToCronTrigger) {
-        this.nameToCronTrigger = nameToCronTrigger;
-    }
-
     public void removeScheduledFuture(String name) {
         nameToScheduledFuture.remove(name);
+    }
+
+    public Map<String, ScheduledSource> getNameToScheduledSource() {
+        return nameToScheduledSource;
+    }
+
+    public void setNameToScheduledSource(Map<String, ScheduledSource> nameToScheduledSource) {
+        this.nameToScheduledSource = nameToScheduledSource;
     }
 }
