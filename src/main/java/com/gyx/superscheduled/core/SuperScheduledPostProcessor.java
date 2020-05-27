@@ -1,6 +1,5 @@
 package com.gyx.superscheduled.core;
 
-import com.gyx.superscheduled.enums.ScheduledType;
 import com.gyx.superscheduled.exception.SuperScheduledException;
 import com.gyx.superscheduled.model.ScheduledSource;
 import org.apache.commons.logging.Log;
@@ -11,9 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -47,7 +44,7 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
                 }
                 ScheduledSource scheduledSource = new ScheduledSource(annotation);
                 if (!scheduledSource.check()) {
-                    throw new SuperScheduledException("在" + beanName + "Bean中"+method.getName()+"方法的注解参数错误");
+                    throw new SuperScheduledException("在" + beanName + "Bean中" + method.getName() + "方法的注解参数错误");
                 }
                 String name = beanName + "#" + method.getName();
                 superScheduledConfig.addScheduledSource(name, scheduledSource);
