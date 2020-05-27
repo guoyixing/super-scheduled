@@ -2,10 +2,9 @@
 SpringBoot的定时任务的加强工具，实现定时任务动态管理,兼容原生springScheduled无需对原本的定时任务进行修改
 
 ## 引入jar包
-导入项目 &emsp;&emsp;`maven仓库正在审核`
 ```xml
 <dependency>
-    <groupId>com.gyx.scheduled</groupId>
+    <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
     <version>0.1.0</version>
 </dependency>
