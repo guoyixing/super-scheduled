@@ -140,10 +140,10 @@ superScheduledManager.runScheduled(name);
 `DELETE` /scheduled/{name}
 #### 4.5 cronApi
 ##### 4.5.1 以cron类型启动Scheduled
-`POST` /scheduled/cron/{name}/add
+`POST` /scheduled/cron/{name}/add <br/>
 参数：`text` \[cron\]
 ##### 4.5.2 将定时任务转为cron模式运行，并修改cron的参数值
-`POST` /scheduled/cron/{name}/set
+`POST` /scheduled/cron/{name}/set <br/>
 参数：`text` \[cron\]
 #### 4.6 fixedDelayApi
 ##### 4.6.1 以FixedDelay模式启动定时任务
