@@ -57,7 +57,7 @@ public class TestApplicationTests {
 
       System.out.println("任务名：" + name);
       //启动定时任务
-      superScheduledManager.addScheduled(name, "0/2 * * * * ?");
+      superScheduledManager.addCronScheduled(name, "0/2 * * * * ?");
       //获取启动汇总的定时任务
       List<String> runScheduledName = superScheduledManager.getRunScheduledName();
       runScheduledName.forEach(System.out::println);
