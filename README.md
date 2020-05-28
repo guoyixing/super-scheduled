@@ -126,6 +126,9 @@ superScheduledManager.runScheduled(name);
 ### 0.2.1版
 * 完善Manager功能
 * 修复大量bug
+### 0.3.0版
+* 添加api接口
+* 添加定时任务线程池配置
 
 ## 后续计划
 * 后续加入可视化管理
