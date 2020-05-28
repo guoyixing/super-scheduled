@@ -9,6 +9,19 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
     <version>0.2.1</version>
 </dependency>
 ```
+## 配置参数
+### 1.配置定时任务线程池（不配置时采用默认参数）
+```properties
+#线程池大小
+spring.super.scheduled.thread-pool.poolSize=30
+#线程名前缀
+spring.super.scheduled.thread-pool.threadNamePrefix=super
+#设置是否关闭时等待执行中的任务执行完成
+spring.super.scheduled.thread-pool.waitForTasksToCompleteOnShutdown=false
+#设置此执行器被关闭时等待的最长时间，用于在其余容器继续关闭之前等待剩余任务执行完成
+#需要将waitForTasksToCompleteOnShutdown设置为true，此配置才起作用
+spring.super.scheduled.thread-pool.awaitTerminationSeconds=0
+```
 
 ## 使用样例
 ### 1.正常使用springScheduled
@@ -116,6 +129,36 @@ superScheduledManager.setScheduledFixedDelay(name, 2000L);
 ```java
 superScheduledManager.runScheduled(name);
 ```
+### 4.Api接口
+#### 4.1 获取所有定时任务
+`GET` /scheduled/name/all
+#### 4.2 获取启动的定时任务
+`GET` /scheduled/name/run
+#### 4.3 手动执行一次任务
+`POST` /scheduled/{name}/run
+#### 4.4 终止定时任务
+`DELETE` /scheduled/{name}
+#### 4.5 cronApi
+##### 4.5.1 以cron类型启动Scheduled
+`POST` /scheduled/cron/{name}/add
+参数：`text` \[cron\]
+##### 4.5.2 将定时任务转为cron模式运行，并修改cron的参数值
+`POST` /scheduled/cron/{name}/set
+参数：`text` \[cron\]
+#### 4.6 fixedDelayApi
+##### 4.6.1 以FixedDelay模式启动定时任务
+`POST` /scheduled/fixedDelay/{name}/add/{fixedDelay}/{initialDelay}
+##### 4.6.2 以FixedDelay模式启动定时任务（不延迟）
+`POST` /scheduled/fixedDelay/{name}/add/{fixedDelay}
+##### 4.6.3 将定时任务转为FixedDelay模式运行，并修改执行间隔的参数值
+`POST` /scheduled/fixedDelay/{name}/set/{fixedDelay}
+#### 4.7 fixedRateApi
+##### 4.7.1 以FixedRate模式启动定时任务
+`POST` /scheduled/fixedRate/{name}/add/{fixedRate}/{initialDelay}
+##### 4.7.2 以FixedRate模式启动定时任务（不延迟）
+`POST` /scheduled/fixedRate/{name}/add/{fixedRate}
+##### 4.7.3 将定时任务转为FixedRate模式运行，并修改执行间隔的参数值
+`POST` /scheduled/fixedRate/{name}/set/{fixedRate}
 
 
 ## 版本更新
