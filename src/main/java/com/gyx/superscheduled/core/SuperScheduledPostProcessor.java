@@ -46,7 +46,7 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
                 if (!scheduledSource.check()) {
                     throw new SuperScheduledException("在" + beanName + "Bean中" + method.getName() + "方法的注解参数错误");
                 }
-                String name = beanName + "#" + method.getName();
+                String name = beanName + "." + method.getName();
                 superScheduledConfig.addScheduledSource(name, scheduledSource);
                 try {
                     changeAnnotationValue(annotation, "cron", Scheduled.CRON_DISABLED);

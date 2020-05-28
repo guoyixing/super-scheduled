@@ -2,10 +2,14 @@ package com.gyx.superscheduled.core;
 
 import com.gyx.superscheduled.exception.SuperScheduledException;
 import com.gyx.superscheduled.model.ScheduledSource;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +17,9 @@ import java.util.concurrent.ScheduledFuture;
 
 @Component
 public class SuperScheduledManager {
+    protected final Log logger = LogFactory.getLog(getClass());
+    private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Autowired
     private SuperScheduledConfig superScheduledConfig;
 
@@ -89,6 +96,7 @@ public class SuperScheduledManager {
         ScheduledFuture scheduledFuture = superScheduledConfig.getScheduledFuture(name);
         scheduledFuture.cancel(true);
         superScheduledConfig.removeScheduledFuture(name);
+        logger.info(df.format(LocalDateTime.now()) + "任务" + name + "已经终止...");
     }
 
     /**
@@ -112,6 +120,7 @@ public class SuperScheduledManager {
 
 
         ScheduledFuture<?> schedule = ScheduledFutureFactory.create(taskScheduler, scheduledSource, runnable);
+        logger.info(df.format(LocalDateTime.now()) + "任务" + name + "已经启动...");
 
         superScheduledConfig.addScheduledSource(name, scheduledSource);
         superScheduledConfig.addScheduledFuture(name, schedule);
