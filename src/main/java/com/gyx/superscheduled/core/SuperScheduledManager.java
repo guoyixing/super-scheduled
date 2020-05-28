@@ -52,7 +52,7 @@ public class SuperScheduledManager {
      * 修改Scheduled的fixedRate
      *
      * @param name      scheduled的名称
-     * @param fixedRate 上一次执行完毕时间点之后多长时间再执行
+     * @param fixedRate 上一次开始执行之后多长时间再执行
      */
     public void setScheduledFixedRate(String name, Long fixedRate) {
         //终止原先的任务
@@ -153,7 +153,7 @@ public class SuperScheduledManager {
      * 以fixedRate类型启动Scheduled
      *
      * @param name         scheduled的名称
-     * @param fixedRate    上一次执行完毕时间点之后多长时间再执行
+     * @param fixedRate    上一次开始执行之后多长时间再执行
      * @param initialDelay 第一次执行的延迟时间
      */
     public void addFixedRateScheduled(String name, Long fixedRate, Long... initialDelay) {
