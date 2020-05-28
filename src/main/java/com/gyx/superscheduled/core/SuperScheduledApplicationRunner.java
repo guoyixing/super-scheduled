@@ -28,7 +28,7 @@ public class SuperScheduledApplicationRunner implements ApplicationRunner {
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args){
         superScheduledConfig.setTaskScheduler(threadPoolTaskScheduler);
         Set<String> allSuperScheduledName = superScheduledConfig.getNameToRunnable().keySet();
         Map<String, ScheduledSource> nameToScheduledSource = superScheduledConfig.getNameToScheduledSource();

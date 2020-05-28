@@ -109,7 +109,7 @@ public class SuperScheduledManager {
         if (getRunScheduledName().contains(name)) {
             throw new SuperScheduledException("定时任务" + name + "已经被启动过了");
         }
-        if (!scheduledSource.check()){
+        if (!scheduledSource.check()) {
             throw new SuperScheduledException("定时任务" + name + "源数据内容错误");
         }
 

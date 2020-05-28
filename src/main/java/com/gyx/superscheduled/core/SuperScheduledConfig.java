@@ -4,11 +4,9 @@ import com.gyx.superscheduled.model.ScheduledSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
@@ -37,19 +35,19 @@ public class SuperScheduledConfig {
     private Map<String, ScheduledSource> nameToScheduledSource = new ConcurrentHashMap<>();
 
 
-    public void addScheduledSource(String name,ScheduledSource scheduledSource){
-        this.nameToScheduledSource.put(name,scheduledSource);
+    public void addScheduledSource(String name, ScheduledSource scheduledSource) {
+        this.nameToScheduledSource.put(name, scheduledSource);
     }
 
-    public ScheduledSource getScheduledSource(String name){
+    public ScheduledSource getScheduledSource(String name) {
         return nameToScheduledSource.get(name);
     }
 
-    public Runnable getRunnable(String name){
+    public Runnable getRunnable(String name) {
         return nameToRunnable.get(name);
     }
 
-    public ScheduledFuture getScheduledFuture(String name){
+    public ScheduledFuture getScheduledFuture(String name) {
         return nameToScheduledFuture.get(name);
     }
 

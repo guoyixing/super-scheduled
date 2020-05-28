@@ -55,7 +55,7 @@ public class ScheduledSource {
                 + (initialDelay == null ? 0 : 1)
                 + (initialDelayString == null ? 0 : 1);
         Integer flag = Integer.valueOf(sb, 2);
-        List<Integer> probability = Arrays.asList(132,133,134,136,137,138,144,145,146,160,161,162,192);
+        List<Integer> probability = Arrays.asList(132, 133, 134, 136, 137, 138, 144, 145, 146, 160, 161, 162, 192);
         return probability.contains(flag);
     }
 
@@ -81,9 +81,9 @@ public class ScheduledSource {
         return null;
     }
 
-    public void refreshType(){
+    public void refreshType() {
         this.type = confirmType();
-        if (this.type == null){
+        if (this.type == null) {
             throw new SuperScheduledException("刷新type，执行失败，无法确定定时任务的类型");
         }
     }

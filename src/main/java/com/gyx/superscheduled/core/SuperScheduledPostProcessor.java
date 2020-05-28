@@ -12,9 +12,10 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import static com.gyx.superscheduled.common.utils.AnnotationUtils.changeAnnotationValue;
 
 @DependsOn("superScheduledConfig")
 @Component
@@ -49,15 +50,9 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
                 String name = beanName + "." + method.getName();
                 superScheduledConfig.addScheduledSource(name, scheduledSource);
                 try {
-                    changeAnnotationValue(annotation, "cron", Scheduled.CRON_DISABLED);
-                    changeAnnotationValue(annotation, "fixedDelay", -1L);
-                    changeAnnotationValue(annotation, "fixedDelayString", "");
-                    changeAnnotationValue(annotation, "fixedRate", -1L);
-                    changeAnnotationValue(annotation, "fixedRateString", "");
-                    changeAnnotationValue(annotation, "initialDelay", -1L);
-                    changeAnnotationValue(annotation, "initialDelayString", "");
+                    clearOriginalScheduled(annotation);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    throw new SuperScheduledException("在关闭原始方法" + beanName + method.getName() + "时出现错误");
                 }
                 superScheduledConfig.addRunnable(name, () -> {
                     try {
@@ -71,29 +66,19 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
         return bean;
     }
 
+    private void clearOriginalScheduled(Scheduled annotation) throws Exception {
+        changeAnnotationValue(annotation, "cron", Scheduled.CRON_DISABLED);
+        changeAnnotationValue(annotation, "fixedDelay", -1L);
+        changeAnnotationValue(annotation, "fixedDelayString", "");
+        changeAnnotationValue(annotation, "fixedRate", -1L);
+        changeAnnotationValue(annotation, "fixedRateString", "");
+        changeAnnotationValue(annotation, "initialDelay", -1L);
+        changeAnnotationValue(annotation, "initialDelayString", "");
+    }
+
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    public static Object changeAnnotationValue(Annotation annotation, String key, Object newValue) throws Exception {
-        InvocationHandler handler = Proxy.getInvocationHandler(annotation);
-        Field f;
-        try {
-            f = handler.getClass().getDeclaredField("memberValues");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e);
-        }
-        f.setAccessible(true);
-        Map<String, Object> memberValues;
-        memberValues = (Map<String, Object>) f.get(handler);
-        Object oldValue = memberValues.get(key);
-        if (oldValue == null || oldValue.getClass() != newValue.getClass()) {
-            throw new IllegalArgumentException();
-        }
-        memberValues.put(key, newValue);
-        return oldValue;
     }
 }
