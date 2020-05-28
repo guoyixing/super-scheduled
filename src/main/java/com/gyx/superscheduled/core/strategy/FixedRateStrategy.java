@@ -10,8 +10,8 @@ import java.util.concurrent.ScheduledFuture;
 public class FixedRateStrategy implements ScheduleStrategy {
     @Override
     public ScheduledFuture<?> schedule(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduledSource scheduledSource, Runnable runnable) {
-        Long fixedRate = scheduledSource.getFixedRate() == null ? Long.valueOf(scheduledSource.getFixedRateString()) : scheduledSource.getFixedRate();
-        Long initialDelay = scheduledSource.getInitialDelay() == null ? Long.valueOf(scheduledSource.getInitialDelayString()) : scheduledSource.getInitialDelay();
+        Long fixedRate = scheduledSource.getFixedRateString() == null ? scheduledSource.getFixedRate() : Long.valueOf(scheduledSource.getFixedRateString());
+        Long initialDelay = scheduledSource.getInitialDelayString() == null ? scheduledSource.getInitialDelay() : Long.valueOf(scheduledSource.getInitialDelayString());
         if (initialDelay == null) {
             initialDelay = 0L;
         }

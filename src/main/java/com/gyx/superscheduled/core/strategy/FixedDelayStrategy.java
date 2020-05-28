@@ -10,9 +10,9 @@ import java.util.concurrent.ScheduledFuture;
 public class FixedDelayStrategy implements ScheduleStrategy {
     @Override
     public ScheduledFuture<?> schedule(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduledSource scheduledSource, Runnable runnable) {
-        Long fixedDelay = scheduledSource.getFixedDelay() == null ? Long.valueOf(scheduledSource.getFixedDelayString()) : scheduledSource.getFixedDelay();
-        Long initialDelay = scheduledSource.getInitialDelay() == null ? Long.valueOf(scheduledSource.getInitialDelayString()) : scheduledSource.getInitialDelay();
-        if (initialDelay == null){
+        Long fixedDelay = scheduledSource.getFixedDelayString() == null ? scheduledSource.getFixedDelay() : Long.valueOf(scheduledSource.getFixedDelayString());
+        Long initialDelay = scheduledSource.getInitialDelayString() == null ? scheduledSource.getInitialDelay() : Long.valueOf(scheduledSource.getInitialDelayString());
+        if (initialDelay == null) {
             initialDelay = 0L;
         }
         FixedDelayTask fixedDelayTask = new FixedDelayTask(runnable, fixedDelay, initialDelay);
