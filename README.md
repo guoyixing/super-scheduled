@@ -107,7 +107,7 @@ superScheduledManager.setScheduledFixedRate(name, 2000L);
 //以FixedDelay模式启动定时任务
 //上一次执行完毕之后2秒后再执行，首次运行延迟1秒
 superScheduledManager.addFixedDelayScheduled(name, 2000L,1000L);
-////首次运行不进行延迟
+//首次运行不进行延迟
 superScheduledManager.addFixedDelayScheduled(name, 2000L);
 //将定时任务转为FixedDelay模式运行，并修改执行间隔的参数值
 superScheduledManager.setScheduledFixedDelay(name, 2000L);
