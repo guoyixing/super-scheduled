@@ -18,7 +18,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <dropwizard.version>2.0.9</dropwizard.version>
     </properties>
 
     <dependencies>
