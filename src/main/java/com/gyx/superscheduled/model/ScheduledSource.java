@@ -5,6 +5,7 @@ import com.gyx.superscheduled.exception.SuperScheduledException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class ScheduledSource {
      */
     private String initialDelayString;
 
+    private Method method;
+
+    private Object bean;
+
     private ScheduledType type;
 
 
@@ -59,7 +64,7 @@ public class ScheduledSource {
         return probability.contains(flag);
     }
 
-    public ScheduledSource(Scheduled annotation) {
+    public ScheduledSource(Scheduled annotation, Method method, Object bean) {
         this.cron = StringUtils.isEmpty(annotation.cron()) ? null : annotation.cron();
         this.fixedDelay = annotation.fixedDelay() < 0 ? null : annotation.fixedDelay();
         this.fixedDelayString = StringUtils.isEmpty(annotation.fixedDelayString()) ? null : annotation.fixedDelayString();
@@ -68,6 +73,8 @@ public class ScheduledSource {
         this.initialDelay = annotation.initialDelay() < 0 ? null : annotation.initialDelay();
         this.initialDelayString = StringUtils.isEmpty(annotation.initialDelayString()) ? null : annotation.initialDelayString();
         this.type = confirmType();
+        this.bean = bean;
+        this.method = method;
     }
 
     public ScheduledType confirmType() {
@@ -170,5 +177,21 @@ public class ScheduledSource {
 
     public void setType(ScheduledType type) {
         this.type = type;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public Object getBean() {
+        return bean;
+    }
+
+    public void setBean(Object bean) {
+        this.bean = bean;
     }
 }

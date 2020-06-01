@@ -5,9 +5,10 @@ import com.gyx.superscheduled.exception.SuperScheduledException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class SuperScheduledRunnable{
+public class SuperScheduledRunnable {
     private Method method;
     private Object bean;
+    private String superScheduledName;
 
 
     public void invoke() {
@@ -35,5 +36,13 @@ public class SuperScheduledRunnable{
 
     public void setBean(Object bean) {
         this.bean = bean;
+    }
+
+    public String getSuperScheduledName() {
+        return superScheduledName;
+    }
+
+    public void setSuperScheduledName(String superScheduledName) {
+        this.superScheduledName = superScheduledName;
     }
 }

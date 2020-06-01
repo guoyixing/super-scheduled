@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 
     <packaging>jar</packaging>
     <name>spring-boot-starter-super-scheduled</name>
