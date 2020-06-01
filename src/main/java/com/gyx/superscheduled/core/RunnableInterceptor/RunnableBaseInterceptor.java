@@ -18,8 +18,16 @@ public class RunnableBaseInterceptor implements MethodInterceptor {
         Object result;
         if ("invoke".equals(method.getName())) {
             strengthen.before(obj, method, args);
-            result = methodProxy.invokeSuper(obj, args);
+            try {
+                result = methodProxy.invokeSuper(obj, args);
+            } catch (Exception e) {
+                strengthen.exception(obj, method, args);
+                throw new SuperScheduledException(strengthen.getClass() + "中强化执行时发生错误", e);
+            } finally {
+                strengthen.afterFinally(obj, method, args);
+            }
             strengthen.after(obj, method, args);
+
         } else {
             result = methodProxy.invokeSuper(obj, args);
         }

@@ -35,4 +35,28 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
         logger.info("定时任务" + superScheduledRunnable.getSuperScheduledName() + "开始执行");
     }
 
+    /**
+     * 异常强化方法
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void exception(Object bean, Method method, Object[] args) {
+
+    }
+
+    /**
+     * Finally强化方法，出现异常也会执行
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void afterFinally(Object bean, Method method, Object[] args) {
+
+    }
+
 }
