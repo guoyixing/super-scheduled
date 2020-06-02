@@ -22,6 +22,11 @@ spring.super.scheduled.thread-pool.waitForTasksToCompleteOnShutdown=false
 #需要将waitForTasksToCompleteOnShutdown设置为true，此配置才起作用
 spring.super.scheduled.thread-pool.awaitTerminationSeconds=0
 ```
+### 2.扩展插件配置
+```
+#开启执行标志
+spring.super.scheduled.plug-in.executionFlag=true
+```
 
 ## 使用样例
 ### 1.正常使用springScheduled
@@ -160,6 +165,65 @@ superScheduledManager.runScheduled(name);
 ##### 4.7.3 将定时任务转为FixedRate模式运行，并修改执行间隔的参数值
 `POST` /scheduled/fixedRate/{name}/set/{fixedRate}
 
+### 5.扩展接口
+#### 5.1 扩展样例
+1. 将类注入到spring容器中
+2. 实现BaseStrengthen接口
+```java
+@Component
+public class Strong implements BaseStrengthen {
+    /**
+     * 前置强化方法
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void before(Object bean, Method method, Object[] args) {
+        System.out.println("定时任务执行前运行");
+    }
+
+    /**
+     * 后置强化方法
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void after(Object bean, Method method, Object[] args) {
+        System.out.println("定时任务执行成功后运行");
+    }
+
+    /**
+     * 异常强化方法
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void exception(Object bean, Method method, Object[] args) {
+        System.out.println("定时任务执行异常时运行");
+    }
+    
+    /**
+     * Finally强化方法，出现异常也会执行
+     *
+     * @param bean   bean实例（或者是被代理的bean）
+     * @param method 执行的方法对象
+     * @param args   方法参数
+     */
+    @Override
+    public void afterFinally(Object bean, Method method, Object[] args) {
+        System.out.println("定时任务执行完成后运行（异常时也运行）");
+    }
+}
+```
+##### 5.2 更多样例
+更多样例参考：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.ExecutionFlagStrengthen
+
 
 ## 版本更新
 ### 0.1.0版
@@ -172,8 +236,11 @@ superScheduledManager.runScheduled(name);
 ### 0.3.0版
 * 添加api接口
 * 添加定时任务线程池配置
+### 0.3.1版
+* 添加扩展接口
 
 ## 后续计划
 * 后续加入可视化管理
 * 调度日志
 * 集群任务统一管理
+* 添加扩展接口，实现任务调度强化
