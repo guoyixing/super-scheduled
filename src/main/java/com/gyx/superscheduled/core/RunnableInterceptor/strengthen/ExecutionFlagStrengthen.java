@@ -1,6 +1,6 @@
 package com.gyx.superscheduled.core.RunnableInterceptor.strengthen;
 
-import com.gyx.superscheduled.core.RunnableInterceptor.SuperScheduledRunnable;
+import com.gyx.superscheduled.common.utils.proxy.Point;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,8 +18,8 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
      */
     @Override
     public void before(Object bean, Method method, Object[] args) {
-        SuperScheduledRunnable superScheduledRunnable = (SuperScheduledRunnable) bean;
-        logger.info("定时任务" + superScheduledRunnable.getSuperScheduledName() + "开始执行");
+        Point point = (Point) bean;
+        logger.info("定时任务" + point.getSuperScheduledName() + "开始执行");
     }
 
     /**
@@ -31,8 +31,8 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
      */
     @Override
     public void after(Object bean, Method method, Object[] args) {
-        SuperScheduledRunnable superScheduledRunnable = (SuperScheduledRunnable) bean;
-        logger.info("定时任务" + superScheduledRunnable.getSuperScheduledName() + "开始执行");
+        Point point = (Point) bean;
+        logger.info("定时任务" + point.getSuperScheduledName() + "开始执行");
     }
 
     /**

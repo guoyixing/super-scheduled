@@ -31,7 +31,7 @@ public class SuperScheduledAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "spring.super.scheduled.thread-pool", name = "executionFlag", havingValue = "true")
+    @ConditionalOnProperty(prefix = "spring.super.scheduled.plug-in", name = "executionFlag", havingValue = "true")
     public ExecutionFlagStrengthen executionFlagStrengthen() {
         return new ExecutionFlagStrengthen();
     }

@@ -8,7 +8,6 @@ public class ThreadPoolTaskSchedulerProperties {
     private String threadNamePrefix;
     private Boolean waitForTasksToCompleteOnShutdown = false;
     private Integer awaitTerminationSeconds = 0;
-    private Boolean executionFlag = false;
 
     public Integer getPoolSize() {
         return poolSize;
@@ -40,13 +39,5 @@ public class ThreadPoolTaskSchedulerProperties {
 
     public void setAwaitTerminationSeconds(Integer awaitTerminationSeconds) {
         this.awaitTerminationSeconds = awaitTerminationSeconds;
-    }
-
-    public Boolean getExecutionFlag() {
-        return executionFlag;
-    }
-
-    public void setExecutionFlag(Boolean executionFlag) {
-        this.executionFlag = executionFlag;
     }
 }

@@ -1,6 +1,8 @@
 package com.gyx.superscheduled.core;
 
-import com.gyx.superscheduled.common.utils.ProxyUtils;
+import com.gyx.superscheduled.common.utils.proxy.Chain;
+import com.gyx.superscheduled.common.utils.proxy.Point;
+import com.gyx.superscheduled.common.utils.proxy.ProxyUtils;
 import com.gyx.superscheduled.core.RunnableInterceptor.RunnableBaseInterceptor;
 import com.gyx.superscheduled.core.RunnableInterceptor.SuperScheduledRunnable;
 import com.gyx.superscheduled.core.RunnableInterceptor.strengthen.BaseStrengthen;
@@ -12,8 +14,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.DependsOn;
@@ -22,8 +22,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
 @DependsOn("threadPoolTaskScheduler")
@@ -45,27 +46,30 @@ public class SuperScheduledApplicationRunner implements ApplicationRunner, Appli
         for (String name : nameToScheduledSource.keySet()) {
             //获取定时任务源数据
             ScheduledSource scheduledSource = nameToScheduledSource.get(name);
-            //实现对象代理
+            //获取所有增强类
             String[] baseStrengthenBeanNames = applicationContext.getBeanNamesForType(BaseStrengthen.class);
-            //实际执行方法的对象，如果存在增强类，会创建代理替换这个对象
-            SuperScheduledRunnable proxy = new SuperScheduledRunnable();
-            //实际执行对象的类型，如果存在增强类，会创建代理替换这个类型
-            Class<? extends SuperScheduledRunnable> proxyClass = SuperScheduledRunnable.class;
+            //创建执行控制器
+            SuperScheduledRunnable runnable = new SuperScheduledRunnable();
+            runnable.setMethod(scheduledSource.getMethod());
+            runnable.setBean(scheduledSource.getBean());
+            //将增强器代理成point
+            List<Point> points = new ArrayList<>(baseStrengthenBeanNames.length);
             for (String baseStrengthenBeanName : baseStrengthenBeanNames) {
                 Object baseStrengthenBean = applicationContext.getBean(baseStrengthenBeanName);
                 //创建代理
-                proxy = ProxyUtils.getInstance(proxyClass, new RunnableBaseInterceptor(baseStrengthenBean));
-                proxyClass = proxy.getClass();
+                Point proxy = ProxyUtils.getInstance(Point.class, new RunnableBaseInterceptor(baseStrengthenBean, runnable));
+                proxy.setSuperScheduledName(name);
+                //所有的points连接起来
+                points.add(proxy);
             }
-            proxy.setMethod(scheduledSource.getMethod());
-            proxy.setBean(scheduledSource.getBean());
-            proxy.setSuperScheduledName(name);
+
+            runnable.setChain(new Chain(points));
             //添加缓存中
-            superScheduledConfig.addRunnable(name, proxy::invoke);
+            superScheduledConfig.addRunnable(name, runnable::invoke);
             //执行方法
             try {
                 ScheduledFuture<?> schedule = ScheduledFutureFactory.create(threadPoolTaskScheduler
-                        , scheduledSource, proxy::invoke);
+                        , scheduledSource, runnable::invoke);
                 superScheduledConfig.addScheduledFuture(name, schedule);
                 logger.info(df.format(LocalDateTime.now()) + "任务" + name + "已经启动...");
 

@@ -1,5 +1,7 @@
 package com.gyx.superscheduled.core.RunnableInterceptor;
 
+import com.gyx.superscheduled.common.utils.proxy.Chain;
+import com.gyx.superscheduled.common.utils.proxy.Point;
 import com.gyx.superscheduled.exception.SuperScheduledException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -8,15 +10,23 @@ import java.lang.reflect.Method;
 public class SuperScheduledRunnable {
     private Method method;
     private Object bean;
-    private String superScheduledName;
+    private Chain chain;
 
 
-    public void invoke() {
-        try {
-            method.invoke(bean);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new SuperScheduledException(e.getLocalizedMessage());
+    public Object invoke() {
+        Object result;
+        if (chain.incIndex() == chain.getList().size()) {
+            try {
+                chain.resetIndex();
+                result = method.invoke(bean);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new SuperScheduledException(e.getLocalizedMessage());
+            }
+        } else {
+            Point point = chain.getList().get(chain.getIndex());
+            result = point.invoke(this);
         }
+        return result;
     }
 
     public SuperScheduledRunnable() {
@@ -38,11 +48,11 @@ public class SuperScheduledRunnable {
         this.bean = bean;
     }
 
-    public String getSuperScheduledName() {
-        return superScheduledName;
+    public Chain getChain() {
+        return chain;
     }
 
-    public void setSuperScheduledName(String superScheduledName) {
-        this.superScheduledName = superScheduledName;
+    public void setChain(Chain chain) {
+        this.chain = chain;
     }
 }

@@ -8,10 +8,9 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 public class RunnableBaseInterceptor implements MethodInterceptor {
-
+    private SuperScheduledRunnable runnable;
 
     private BaseStrengthen strengthen;
-
 
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
@@ -19,7 +18,7 @@ public class RunnableBaseInterceptor implements MethodInterceptor {
         if ("invoke".equals(method.getName())) {
             strengthen.before(obj, method, args);
             try {
-                result = methodProxy.invokeSuper(obj, args);
+                result = runnable.invoke();
             } catch (Exception e) {
                 strengthen.exception(obj, method, args);
                 throw new SuperScheduledException(strengthen.getClass() + "中强化执行时发生错误", e);
@@ -34,7 +33,8 @@ public class RunnableBaseInterceptor implements MethodInterceptor {
         return result;
     }
 
-    public RunnableBaseInterceptor(Object object) {
+    public RunnableBaseInterceptor(Object object, SuperScheduledRunnable runnable) {
+        this.runnable = runnable;
         if (BaseStrengthen.class.isAssignableFrom(object.getClass())) {
             this.strengthen = (BaseStrengthen) object;
         } else {
@@ -43,5 +43,6 @@ public class RunnableBaseInterceptor implements MethodInterceptor {
     }
 
     public RunnableBaseInterceptor() {
+
     }
 }
