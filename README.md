@@ -9,6 +9,8 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
     <version>0.3.1</version>
 </dependency>
 ```
+## 原理说明
+[https://keyboard-dog.blog.csdn.net/article/details/106494637](https://keyboard-dog.blog.csdn.net/article/details/106494637)
 ## 配置参数
 ### 1.配置定时任务线程池（不配置时采用默认参数）
 ```properties
