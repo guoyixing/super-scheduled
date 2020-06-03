@@ -8,8 +8,13 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 public class RunnableBaseInterceptor implements MethodInterceptor {
+    /**
+     * 定时任务执行器
+     */
     private SuperScheduledRunnable runnable;
-
+    /**
+     * 定时任务增强类
+     */
     private BaseStrengthen strengthen;
 
     @Override

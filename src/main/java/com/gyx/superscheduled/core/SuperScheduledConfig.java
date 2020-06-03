@@ -1,8 +1,6 @@
 package com.gyx.superscheduled.core;
 
 import com.gyx.superscheduled.model.ScheduledSource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +10,6 @@ import java.util.concurrent.ScheduledFuture;
 
 @Component("superScheduledConfig")
 public class SuperScheduledConfig {
-    protected final Log logger = LogFactory.getLog(getClass());
-
     /**
      * 执行定时任务的线程池
      */

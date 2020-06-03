@@ -5,11 +5,12 @@ import com.gyx.superscheduled.exception.SuperScheduledException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-public class ScheduledSource {
+public class ScheduledSource implements Serializable {
     /**
      * cron表达式
      */
@@ -43,9 +44,9 @@ public class ScheduledSource {
      */
     private String initialDelayString;
 
-    private Method method;
+    private transient Method method;
 
-    private Object bean;
+    private transient Object bean;
 
     private ScheduledType type;
 

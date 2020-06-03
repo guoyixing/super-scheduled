@@ -25,12 +25,21 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
 
     private ApplicationContext applicationContext;
 
+    /**
+     * 实例化bean之前的操作
+     * @param bean bean实例
+     * @param beanName bean的Name
+     */
     @Override
-    public Object postProcessBeforeInitialization(Object bean,
-                                                  String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
 
+    /**
+     * 实例化bean之后的操作
+     * @param bean bean实例
+     * @param beanName bean的Name
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean,
                                                  String beanName) throws BeansException {
@@ -60,6 +69,11 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
         return bean;
     }
 
+    /**
+     * 修改注解原先的属性
+     * @param annotation 注解实例对象
+     * @throws Exception
+     */
     private void clearOriginalScheduled(Scheduled annotation) throws Exception {
         changeAnnotationValue(annotation, "cron", Scheduled.CRON_DISABLED);
         changeAnnotationValue(annotation, "fixedDelay", -1L);
@@ -71,6 +85,10 @@ public class SuperScheduledPostProcessor implements BeanPostProcessor, Applicati
     }
 
 
+    /**
+     * 获取SpringBoot的上下文
+     * @param applicationContext SpringBoot的上下文
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;

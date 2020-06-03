@@ -34,8 +34,14 @@ public class SuperScheduledApplicationRunner implements ApplicationRunner, Appli
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private ApplicationContext applicationContext;
 
+    /**
+     * 定时任务配置管理器
+     */
     @Autowired
     private SuperScheduledConfig superScheduledConfig;
+    /**
+     * 定时任务执行线程
+     */
     @Autowired
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
@@ -59,6 +65,7 @@ public class SuperScheduledApplicationRunner implements ApplicationRunner, Appli
                 //创建代理
                 Point proxy = ProxyUtils.getInstance(Point.class, new RunnableBaseInterceptor(baseStrengthenBean, runnable));
                 proxy.setSuperScheduledName(name);
+                proxy.setScheduledSource(scheduledSource);
                 //所有的points连接起来
                 points.add(proxy);
             }

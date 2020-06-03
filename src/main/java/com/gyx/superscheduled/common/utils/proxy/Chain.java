@@ -18,10 +18,16 @@ public class Chain {
         return index;
     }
 
+    /**
+     * 索引自增1
+     */
     public int incIndex() {
         return ++index;
     }
 
+    /**
+     * 索引还原
+     */
     public void resetIndex() {
         this.index = -1;
     }
