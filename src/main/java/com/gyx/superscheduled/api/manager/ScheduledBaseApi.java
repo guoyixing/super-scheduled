@@ -43,7 +43,7 @@ public class ScheduledBaseApi {
     }
 
     /**
-     * 获取日志文件信息
+     * 获取日志信息
      */
     @GetMapping("/log/{fileName}")
     public List<ScheduledLog> getLogs(@PathVariable("fileName") String fileName) {
