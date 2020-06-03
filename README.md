@@ -11,6 +11,7 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
 ```
 ## 原理说明
 [https://keyboard-dog.blog.csdn.net/article/details/106494637](https://keyboard-dog.blog.csdn.net/article/details/106494637)
+
 ## 配置参数
 ### 1.配置定时任务线程池（不配置时采用默认参数）
 ```properties
@@ -28,6 +29,10 @@ spring.super.scheduled.thread-pool.awaitTerminationSeconds=0
 ```
 #开启执行标志
 spring.super.scheduled.plug-in.executionFlag=true
+#开启定时任务调度日志，日志文件是存在本地磁盘上的
+spring.super.scheduled.plug-in.executionLog=true
+#日志存放位置，不设置默认位置为程序同级目录下
+spring.super.scheduled.plug-in.logPath=H:/tmp/log-scheduled
 ```
 
 ## 使用样例
@@ -136,6 +141,15 @@ superScheduledManager.setScheduledFixedDelay(name, 2000L);
 ```java
 superScheduledManager.runScheduled(name);
 ```
+#### 3.7 获取日志文件信息
+```java
+superScheduledManager.getScheduledLogFiles();
+```
+#### 3.8 获取日志信息
+```java
+superScheduledManager.getScheduledLogs(fileName);
+```
+
 ### 4.Api接口
 #### 4.1 获取所有定时任务
 `GET` /scheduled/name/all
@@ -166,6 +180,10 @@ superScheduledManager.runScheduled(name);
 `POST` /scheduled/fixedRate/{name}/add/{fixedRate}
 ##### 4.7.3 将定时任务转为FixedRate模式运行，并修改执行间隔的参数值
 `POST` /scheduled/fixedRate/{name}/set/{fixedRate}
+#### 4.8 获取日志文件信息
+`GET` /scheduled/log/files
+#### 4.9 获取日志信息
+`GET` /scheduled/log/{fileName}
 
 ### 5.扩展接口
 #### 5.1 扩展样例
@@ -224,7 +242,9 @@ public class Strong implements BaseStrengthen {
 }
 ```
 ##### 5.2 更多样例
-更多样例参考：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.ExecutionFlagStrengthen
+更多样例参考：<br/>
+执行标记增强器：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.ExecutionFlagStrengthen<br/>
+执行日志增强器：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.LogStrengthen<br/>
 
 
 ## 版本更新
@@ -240,9 +260,9 @@ public class Strong implements BaseStrengthen {
 * 添加定时任务线程池配置
 ### 0.3.1版
 * 添加扩展接口
+### 0.3.2版
+* 添加定时任务调度日志
 
 ## 后续计划
 * 后续加入可视化管理
-* 调度日志
 * 集群任务统一管理
-* 添加扩展接口，实现任务调度强化
