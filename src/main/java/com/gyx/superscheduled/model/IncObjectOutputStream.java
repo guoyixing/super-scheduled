@@ -6,11 +6,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class IncObjectOutputStream extends ObjectOutputStream {
-    private File file;
+    public static File file;
 
     public IncObjectOutputStream(File file) throws IOException, SecurityException {
         super(new FileOutputStream(file, true));
-        this.file = file;
     }
 
     @Override

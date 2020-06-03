@@ -1,6 +1,8 @@
 package com.gyx.superscheduled.common.utils;
 
+import com.gyx.superscheduled.exception.SuperScheduledException;
 import com.gyx.superscheduled.model.IncObjectOutputStream;
+import com.gyx.superscheduled.model.ScheduledLogFile;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -23,7 +25,8 @@ public class SerializableUtils {
     public static void toIncFile(Object obj, String fileSrc, String fileName) {
         fileSrc = existFile(fileSrc);
         File file = new File(fileSrc + File.separator + fileName);
-        try (ObjectOutputStream os = new IncObjectOutputStream(file)) {
+        IncObjectOutputStream.file = file;
+        try (IncObjectOutputStream os = new IncObjectOutputStream(file)) {
             os.writeObject(obj);
             os.flush();
         } catch (IOException ex) {
@@ -31,6 +34,11 @@ public class SerializableUtils {
         }
     }
 
+    /**
+     * 反序列化对象
+     * @param fileSrc 文件夹路径
+     * @param fileName 文件名
+     */
     public  static <T> List<T> fromIncFile(String fileSrc, String fileName) {
         List<T> list = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileSrc + File.separator + fileName))) {
@@ -38,10 +46,35 @@ public class SerializableUtils {
             while ((obj = (T) ois.readObject()) != null){
                 list.add(obj);
             }
-        } catch (IOException | ClassNotFoundException ex) {
+        }catch (EOFException e){
+            //文件读取结束，不需要处理
+        }catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * 获取指定文件夹下的所有文件信息
+     * @param fileSrc 文件夹路径
+     */
+    public static List<ScheduledLogFile> getScheduledLogFiles(String fileSrc) {
+        File file = new File(fileSrc);
+        if (file.isDirectory()) {
+            // 获取路径下的所有文件
+            File[] files = file.listFiles();
+            List<ScheduledLogFile> logFiles = new ArrayList<>();
+            for (int i = 0; i < files.length; i++) {
+                // 如果还是文件夹 递归获取里面的文件 文件夹
+                if (!files[i].isDirectory()) {
+                    ScheduledLogFile scheduledLogFile = new ScheduledLogFile(files[i]);
+                    logFiles.add(scheduledLogFile);
+                }
+            }
+            return logFiles;
+        } else {
+            throw new SuperScheduledException("路径："+fileSrc+"不是文件夹");
+        }
     }
 
     /**

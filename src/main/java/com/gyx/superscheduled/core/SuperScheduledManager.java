@@ -1,7 +1,11 @@
 package com.gyx.superscheduled.core;
 
+import com.gyx.superscheduled.common.utils.SerializableUtils;
 import com.gyx.superscheduled.exception.SuperScheduledException;
+import com.gyx.superscheduled.model.ScheduledLog;
+import com.gyx.superscheduled.model.ScheduledLogFile;
 import com.gyx.superscheduled.model.ScheduledSource;
+import com.gyx.superscheduled.properties.PlugInProperties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ public class SuperScheduledManager {
 
     @Autowired
     private SuperScheduledConfig superScheduledConfig;
+    @Autowired
+    private PlugInProperties plugInProperties;
 
     /**
      * 修改Scheduled的执行周期
@@ -185,5 +191,24 @@ public class SuperScheduledManager {
     public void runScheduled(String name) {
         Runnable runnable = superScheduledConfig.getRunnable(name);
         runnable.run();
+    }
+
+    /**
+     * 获取日志信息
+     *
+     * @param fileName 日志文件名
+     */
+    public List<ScheduledLog> getScheduledLogs(String fileName) {
+        String logPath = plugInProperties.getLogPath();
+        List<ScheduledLog> scheduledLogs = SerializableUtils.fromIncFile(logPath, fileName);
+        return scheduledLogs;
+    }
+
+    /**
+     * 获取日志文件信息
+     */
+    public List<ScheduledLogFile> getScheduledLogFiles() {
+        String logPath = plugInProperties.getLogPath();
+        return SerializableUtils.getScheduledLogFiles(logPath);
     }
 }
