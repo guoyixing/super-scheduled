@@ -1,4 +1,4 @@
-# SpringBoot的定时任务的加强工具
+# SpringBoot的定时任务动态管理
 SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全兼容原生@Scheduled注解,无需对原本的定时任务进行修改
 
 ## 引入jar包
