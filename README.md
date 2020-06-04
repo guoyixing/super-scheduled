@@ -26,7 +26,7 @@ spring.super.scheduled.thread-pool.waitForTasksToCompleteOnShutdown=false
 spring.super.scheduled.thread-pool.awaitTerminationSeconds=0
 ```
 ### 2.扩展插件配置
-```
+```properties
 #开启执行标志
 spring.super.scheduled.plug-in.executionFlag=true
 #开启定时任务调度日志，日志文件是存在本地磁盘上的
