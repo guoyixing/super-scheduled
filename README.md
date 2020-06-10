@@ -6,7 +6,7 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
 <dependency>
     <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
 </dependency>
 ```
 ## 原理说明
@@ -149,6 +149,11 @@ superScheduledManager.getScheduledLogFiles();
 ```java
 superScheduledManager.getScheduledLogs(fileName);
 ```
+#### 3.9 结束正在执行中的任务，跳过这次运行
+** 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行 **
+```java
+superScheduledManager.callOffScheduled(name);
+```
 
 ### 4.Api接口
 #### 4.1 获取所有定时任务
@@ -184,6 +189,9 @@ superScheduledManager.getScheduledLogs(fileName);
 `GET` /scheduled/log/files
 #### 4.9 获取日志信息
 `GET` /scheduled/log/{fileName}
+#### 4.10 结束正在执行中的任务，跳过这次运行
+** 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行 **
+`POST` /scheduled/{name}/callOff
 
 ### 5.扩展接口
 #### 5.1 扩展样例
@@ -195,48 +203,52 @@ public class Strong implements BaseStrengthen {
     /**
      * 前置强化方法
      *
-     * @param bean   bean实例（或者是被代理的bean）
-     * @param method 执行的方法对象
-     * @param args   方法参数
+     * @param bean    bean实例（或者是被代理的bean）
+     * @param method  执行的方法对象
+     * @param args    方法参数
+     * @param context 任务线程运行时的上下文
      */
     @Override
-    public void before(Object bean, Method method, Object[] args) {
+    public void before(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
         System.out.println("定时任务执行前运行");
     }
 
     /**
      * 后置强化方法
      *
-     * @param bean   bean实例（或者是被代理的bean）
-     * @param method 执行的方法对象
-     * @param args   方法参数
+     * @param bean    bean实例（或者是被代理的bean）
+     * @param method  执行的方法对象
+     * @param args    方法参数
+     * @param context 任务线程运行时的上下文
      */
     @Override
-    public void after(Object bean, Method method, Object[] args) {
+    public void after(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
         System.out.println("定时任务执行成功后运行");
     }
 
     /**
      * 异常强化方法
      *
-     * @param bean   bean实例（或者是被代理的bean）
-     * @param method 执行的方法对象
-     * @param args   方法参数
+     * @param bean    bean实例（或者是被代理的bean）
+     * @param method  执行的方法对象
+     * @param args    方法参数
+     * @param context 任务线程运行时的上下文
      */
     @Override
-    public void exception(Object bean, Method method, Object[] args) {
+    public void exception(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
         System.out.println("定时任务执行异常时运行");
     }
-    
+
     /**
      * Finally强化方法，出现异常也会执行
      *
-     * @param bean   bean实例（或者是被代理的bean）
-     * @param method 执行的方法对象
-     * @param args   方法参数
+     * @param bean    bean实例（或者是被代理的bean）
+     * @param method  执行的方法对象
+     * @param args    方法参数
+     * @param context 任务线程运行时的上下文
      */
     @Override
-    public void afterFinally(Object bean, Method method, Object[] args) {
+    public void afterFinally(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
         System.out.println("定时任务执行完成后运行（异常时也运行）");
     }
 }
@@ -262,6 +274,9 @@ public class Strong implements BaseStrengthen {
 * 添加扩展接口
 ### 0.3.2版
 * 添加定时任务调度日志
+### 0.3.3版
+* 添加任务线程运行时上下文
+* 添加跳过当前执行任务的能力
 
 ## 后续计划
 * 后续加入可视化管理
