@@ -150,7 +150,7 @@ superScheduledManager.getScheduledLogFiles();
 superScheduledManager.getScheduledLogs(fileName);
 ```
 #### 3.9 结束正在执行中的任务，跳过这次运行
-** 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行 **
+**只有在每个前置增强器结束之后才会判断是否需要跳过此次运行**
 ```java
 superScheduledManager.callOffScheduled(name);
 ```
@@ -190,7 +190,7 @@ superScheduledManager.callOffScheduled(name);
 #### 4.9 获取日志信息
 `GET` /scheduled/log/{fileName}
 #### 4.10 结束正在执行中的任务，跳过这次运行
-** 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行 **
+**只有在每个前置增强器结束之后才会判断是否需要跳过此次运行**
 `POST` /scheduled/{name}/callOff
 
 ### 5.扩展接口
