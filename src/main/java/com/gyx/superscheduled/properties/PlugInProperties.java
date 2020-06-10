@@ -2,7 +2,7 @@ package com.gyx.superscheduled.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "spring.super.scheduled.plug-in")
+@ConfigurationProperties(prefix = "spring.super.scheduled.plug-interfaces")
 public class PlugInProperties {
     private Boolean executionFlag = false;
     private Boolean executionLog = false;

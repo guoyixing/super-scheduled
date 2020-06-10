@@ -1,5 +1,6 @@
 package com.gyx.superscheduled.core.RunnableInterceptor.strengthen;
 
+import com.gyx.superscheduled.common.annotation.SuperScheduledInteriorOrder;
 import com.gyx.superscheduled.common.utils.SerializableUtils;
 import com.gyx.superscheduled.common.utils.proxy.Point;
 import com.gyx.superscheduled.model.ScheduledLog;
@@ -8,6 +9,7 @@ import com.gyx.superscheduled.model.ScheduledRunningContext;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+@SuperScheduledInteriorOrder(-1)
 public class LogStrengthen implements BaseStrengthen {
     private ScheduledLog scheduledLog;
 

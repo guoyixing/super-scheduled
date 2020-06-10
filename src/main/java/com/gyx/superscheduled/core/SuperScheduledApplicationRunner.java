@@ -1,5 +1,8 @@
 package com.gyx.superscheduled.core;
 
+import com.gyx.superscheduled.common.annotation.SuperScheduledInteriorOrder;
+import com.gyx.superscheduled.common.annotation.SuperScheduledOrder;
+import com.gyx.superscheduled.common.utils.AnnotationUtils;
 import com.gyx.superscheduled.common.utils.proxy.Chain;
 import com.gyx.superscheduled.common.utils.proxy.Point;
 import com.gyx.superscheduled.common.utils.proxy.ProxyUtils;
@@ -62,14 +65,20 @@ public class SuperScheduledApplicationRunner implements ApplicationRunner, Appli
             List<Point> points = new ArrayList<>(baseStrengthenBeanNames.length);
             for (String baseStrengthenBeanName : baseStrengthenBeanNames) {
                 Object baseStrengthenBean = applicationContext.getBean(baseStrengthenBeanName);
+                //获取秩序顺序
+                SuperScheduledOrder orderAnnotation = baseStrengthenBean.getClass().getAnnotation(SuperScheduledOrder.class);
+                SuperScheduledInteriorOrder interiorOrderAnnotation = baseStrengthenBean.getClass().getAnnotation(SuperScheduledInteriorOrder.class);
                 //创建代理
                 Point proxy = ProxyUtils.getInstance(Point.class, new RunnableBaseInterceptor(baseStrengthenBean, runnable));
+                proxy.setOrder(orderAnnotation == null ? 0 : orderAnnotation.value());
+                proxy.setInteriorOrder(interiorOrderAnnotation == null ? null : interiorOrderAnnotation.value());
                 proxy.setSuperScheduledName(name);
                 proxy.setScheduledSource(scheduledSource);
                 //所有的points连接起来
                 points.add(proxy);
             }
-
+            //按照执行顺序排序
+            AnnotationUtils.superScheduledOrderSort(points);
             runnable.setChain(new Chain(points));
             //添加缓存中
             superScheduledConfig.addRunnable(name, runnable::invoke);

@@ -12,7 +12,18 @@ public abstract class Point {
     private ScheduledSource scheduledSource;
 
     /**
+     * 执行顺序
+     */
+    private Integer order;
+
+    /**
+     * 内部执行顺序
+     */
+    private Integer interiorOrder;
+
+    /**
      * 抽象的执行方法，使用代理实现
+     *
      * @param runnable 定时任务执行器
      */
     public abstract Object invoke(SuperScheduledRunnable runnable);
@@ -31,5 +42,21 @@ public abstract class Point {
 
     public void setScheduledSource(ScheduledSource scheduledSource) {
         this.scheduledSource = scheduledSource;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public Integer getInteriorOrder() {
+        return interiorOrder;
+    }
+
+    public void setInteriorOrder(Integer interiorOrder) {
+        this.interiorOrder = interiorOrder;
     }
 }
