@@ -197,8 +197,10 @@ superScheduledManager.callOffScheduled(name);
 #### 5.1 扩展样例
 1. 将类注入到spring容器中
 2. 实现BaseStrengthen接口
+3. 使用@SuperScheduledOrder(int)注解实现执行优先级控制，int值越大优先级越高，默认值为0
 ```java
 @Component
+@SuperScheduledOrder(1)
 public class Strong implements BaseStrengthen {
     /**
      * 前置强化方法
@@ -277,6 +279,7 @@ public class Strong implements BaseStrengthen {
 ### 0.3.3版
 * 添加任务线程运行时上下文
 * 添加跳过当前执行任务的能力
+* 添加扩展类的执行优先级
 
 ## 后续计划
 * 后续加入可视化管理
