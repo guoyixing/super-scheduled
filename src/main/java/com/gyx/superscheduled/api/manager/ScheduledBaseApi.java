@@ -18,15 +18,28 @@ public class ScheduledBaseApi {
 
     /**
      * 手动执行一次任务
+     *
      * @param name 定时任务名称
      */
     @PostMapping("/{name}/run")
-    public void addFixedRateScheduled(@PathVariable("name") String name) {
+    public void runScheduled(@PathVariable("name") String name) {
         superScheduledManager.runScheduled(name);
     }
 
     /**
+     * 结束正在执行中的任务，跳过这次运行
+     * 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行
+     *
+     * @param name 定时任务名称
+     */
+    @PostMapping("/{name}/callOff")
+    public void callOffScheduled(@PathVariable("name") String name) {
+        superScheduledManager.callOffScheduled(name);
+    }
+
+    /**
      * 终止定时任务
+     *
      * @param name 定时任务名称
      */
     @DeleteMapping("/{name}")

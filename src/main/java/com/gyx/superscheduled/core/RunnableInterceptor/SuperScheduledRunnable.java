@@ -3,6 +3,7 @@ package com.gyx.superscheduled.core.RunnableInterceptor;
 import com.gyx.superscheduled.common.utils.proxy.Chain;
 import com.gyx.superscheduled.common.utils.proxy.Point;
 import com.gyx.superscheduled.exception.SuperScheduledException;
+import com.gyx.superscheduled.model.ScheduledRunningContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -20,6 +21,10 @@ public class SuperScheduledRunnable {
      * 增强器的调用链
      */
     private Chain chain;
+    /**
+     * 线程运行时的上下文
+     */
+    private ScheduledRunningContext context;
 
 
     public Object invoke() {
@@ -45,6 +50,7 @@ public class SuperScheduledRunnable {
     }
 
     public SuperScheduledRunnable() {
+        this.context = new ScheduledRunningContext();
     }
 
     public Method getMethod() {
@@ -69,5 +75,13 @@ public class SuperScheduledRunnable {
 
     public void setChain(Chain chain) {
         this.chain = chain;
+    }
+
+    public ScheduledRunningContext getContext() {
+        return context;
+    }
+
+    public void setContext(ScheduledRunningContext context) {
+        this.context = context;
     }
 }

@@ -1,5 +1,6 @@
 package com.gyx.superscheduled.core;
 
+import com.gyx.superscheduled.core.RunnableInterceptor.SuperScheduledRunnable;
 import com.gyx.superscheduled.model.ScheduledSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,11 @@ public class SuperScheduledConfig {
     private Map<String, Runnable> nameToRunnable = new ConcurrentHashMap<>();
 
     /**
+     * 定时任务名称与任务执行器  的关联关系容器
+     */
+    private Map<String, SuperScheduledRunnable> nameToSuperScheduledRunnable = new ConcurrentHashMap<>();
+
+    /**
      * 定时任务名称与定时任务的源信息  的关联关系容器
      */
     private Map<String, ScheduledSource> nameToScheduledSource = new ConcurrentHashMap<>();
@@ -37,6 +43,14 @@ public class SuperScheduledConfig {
 
     public ScheduledSource getScheduledSource(String name) {
         return nameToScheduledSource.get(name);
+    }
+
+    public void addSuperScheduledRunnable(String name, SuperScheduledRunnable superScheduledRunnable) {
+        this.nameToSuperScheduledRunnable.put(name, superScheduledRunnable);
+    }
+
+    public SuperScheduledRunnable getSuperScheduledRunnable(String name) {
+        return nameToSuperScheduledRunnable.get(name);
     }
 
     public Runnable getRunnable(String name) {
@@ -89,5 +103,13 @@ public class SuperScheduledConfig {
 
     public void setNameToScheduledSource(Map<String, ScheduledSource> nameToScheduledSource) {
         this.nameToScheduledSource = nameToScheduledSource;
+    }
+
+    public Map<String, SuperScheduledRunnable> getNameToSuperScheduledRunnable() {
+        return nameToSuperScheduledRunnable;
+    }
+
+    public void setNameToSuperScheduledRunnable(Map<String, SuperScheduledRunnable> nameToSuperScheduledRunnable) {
+        this.nameToSuperScheduledRunnable = nameToSuperScheduledRunnable;
     }
 }

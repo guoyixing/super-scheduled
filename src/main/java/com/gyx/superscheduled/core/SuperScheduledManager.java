@@ -1,6 +1,7 @@
 package com.gyx.superscheduled.core;
 
 import com.gyx.superscheduled.common.utils.SerializableUtils;
+import com.gyx.superscheduled.core.RunnableInterceptor.SuperScheduledRunnable;
 import com.gyx.superscheduled.exception.SuperScheduledException;
 import com.gyx.superscheduled.model.ScheduledLog;
 import com.gyx.superscheduled.model.ScheduledLogFile;
@@ -191,6 +192,17 @@ public class SuperScheduledManager {
     public void runScheduled(String name) {
         Runnable runnable = superScheduledConfig.getRunnable(name);
         runnable.run();
+    }
+
+    /**
+     * 结束正在执行中的任务，跳过这次运行
+     * 只有在每个前置增强器结束之后才会判断是否需要跳过此次运行
+     *
+     * @param name scheduled的名称
+     */
+    public void callOffScheduled(String name) {
+        SuperScheduledRunnable superScheduledRunnable = superScheduledConfig.getSuperScheduledRunnable(name);
+        superScheduledRunnable.getContext().setCallOff(true);
     }
 
     /**
