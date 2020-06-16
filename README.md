@@ -35,6 +35,8 @@ spring.super.scheduled.plug-in.executionLog=true
 spring.super.scheduled.plug-in.logPath=H:/tmp/log-scheduled
 #开启基于zookeeper的集群模式
 spring.super.scheduled.plug-in.colony=true
+#zookeeper集群模式的定时任务服务名，相同名称的定时任务名称服务会被统一管理
+spring.super.scheduled.plug-in.colonyName=test
 ```
 ### 3.zookeeper配置
 ```properties
