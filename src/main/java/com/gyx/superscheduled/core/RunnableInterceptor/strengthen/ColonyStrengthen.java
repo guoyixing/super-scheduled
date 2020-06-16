@@ -34,7 +34,7 @@ public class ColonyStrengthen implements BaseStrengthen {
         boolean exists = zk.exists(zooKeeperProperties.getZkParentNodePath());
 
         if (exists) {
-            List<String> children = zk.getChildren(zooKeeperProperties.getZkParentNodePath());
+            List<String> children = zk .getChildren(zooKeeperProperties.getZkParentNodePath());
             if (children != null && children.size() > 0) {
                 Collections.sort(children);
                 if (zooKeeperProperties.getZkPath().equals(zooKeeperProperties.getZkParentNodePath() + '/' + children.get(0))) {
