@@ -6,7 +6,7 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
 <dependency>
     <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
 </dependency>
 ```
 ## 原理说明
@@ -33,6 +33,17 @@ spring.super.scheduled.plug-in.executionFlag=true
 spring.super.scheduled.plug-in.executionLog=true
 #日志存放位置，不设置默认位置为程序同级目录下
 spring.super.scheduled.plug-in.logPath=H:/tmp/log-scheduled
+#开启基于zookeeper的集群模式
+spring.super.scheduled.plug-in.colony=true
+```
+### 3.zookeeper配置
+```properties
+#设置zookeeper地址，zookeeper集群多个地址用英文逗号隔开
+spring.super.scheduled.zookeeper.url=127.0.0.1:2181
+#设置zookeeper session超时时间
+spring.super.scheduled.zookeeper.sessionTimeout=60000
+#设置zookeeper连接超时时间
+spring.super.scheduled.zookeeper.connectionTimeout=60000
 ```
 
 ## 使用样例
@@ -255,10 +266,26 @@ public class Strong implements BaseStrengthen {
     }
 }
 ```
-##### 5.2 更多样例
+#### 5.2 更多样例
 更多样例参考：<br/>
 执行标记增强器：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.ExecutionFlagStrengthen<br/>
 执行日志增强器：com.gyx.superscheduled.core.RunnableInterceptor.strengthen.LogStrengthen<br/>
+
+### 6.集群模式
+#### 6.1基于zookeeper的集群模式
+部署多服务的时候，会限制定时任务的执行，防止同一个任务在多个服务上反复运行
+`目前不支持设置的指定的定时任务`
+`目前不支持统一的动态管理，只能单个逐一设置`
+##### 6.1.1开启zk集群模式
+```
+spring.super.scheduled.plug-in.colony=true
+#设置zookeeper地址，zookeeper集群多个地址用英文逗号隔开
+spring.super.scheduled.zookeeper.url=127.0.0.1:2181
+#设置zookeeper session超时时间,默认值为60秒
+spring.super.scheduled.zookeeper.sessionTimeout=60000
+#设置zookeeper连接超时时间,默认值为60秒
+spring.super.scheduled.zookeeper.connectionTimeout=60000
+```
 
 
 ## 版本更新
@@ -280,6 +307,9 @@ public class Strong implements BaseStrengthen {
 * 添加任务线程运行时上下文
 * 添加跳过当前执行任务的能力
 * 添加扩展类的执行优先级
+### 0.3.4版
+* 添加基于zookeeper的集群模式
+* 修复跳过单次运行产生的bug
 
 ## 后续计划
 * 后续加入可视化管理
