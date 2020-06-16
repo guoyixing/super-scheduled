@@ -8,6 +8,8 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 public class RunnableBaseInterceptor implements MethodInterceptor {
     protected final Log logger = LogFactory.getLog(getClass());
@@ -23,23 +25,18 @@ public class RunnableBaseInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
         Object result;
-        if ("invoke".equals(method.getName())) {
-            strengthen.before(obj, method, args,runnable.getContext());
+        List<String> methodName = Arrays.asList("invoke", "before", "after", "exception", "afterFinally");
+        if (methodName.contains(method.getName())) {
+            strengthen.before(obj, method, args, runnable.getContext());
             try {
-                if (runnable.getContext().getCallOff()) {
-                    result = null;
-                    logger.info(runnable.getContext().getCallOffRemark());
-                }else {
-                    result = runnable.invoke();
-                }
+                result = runnable.invoke();
             } catch (Exception e) {
-                strengthen.exception(obj, method, args,runnable.getContext());
+                strengthen.exception(obj, method, args, runnable.getContext());
                 throw new SuperScheduledException(strengthen.getClass() + "中强化执行时发生错误", e);
             } finally {
-                strengthen.afterFinally(obj, method, args,runnable.getContext());
+                strengthen.afterFinally(obj, method, args, runnable.getContext());
             }
-            strengthen.after(obj, method, args,runnable.getContext());
-            runnable.getContext().setCallOff(Boolean.FALSE);
+            strengthen.after(obj, method, args, runnable.getContext());
         } else {
             result = methodProxy.invokeSuper(obj, args);
         }

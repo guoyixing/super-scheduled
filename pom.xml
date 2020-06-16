@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
 
     <packaging>jar</packaging>
     <name>spring-boot-starter-super-scheduled</name>
@@ -30,6 +30,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.7</version>
         </dependency>
     </dependencies>
 

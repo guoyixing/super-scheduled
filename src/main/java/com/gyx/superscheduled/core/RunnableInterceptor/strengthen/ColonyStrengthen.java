@@ -1,16 +1,25 @@
 package com.gyx.superscheduled.core.RunnableInterceptor.strengthen;
 
 import com.gyx.superscheduled.common.annotation.SuperScheduledInteriorOrder;
-import com.gyx.superscheduled.common.utils.proxy.Point;
+import com.gyx.superscheduled.exception.SuperScheduledException;
 import com.gyx.superscheduled.model.ScheduledRunningContext;
+import com.gyx.superscheduled.properties.ZooKeeperProperties;
+import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.List;
 
-@SuperScheduledInteriorOrder
-public class ExecutionFlagStrengthen implements BaseStrengthen {
+@SuperScheduledInteriorOrder(Integer.MAX_VALUE)
+public class ColonyStrengthen implements BaseStrengthen {
     protected final Log logger = LogFactory.getLog(getClass());
+    @Autowired
+    private ZkClient zk;
+    @Autowired
+    private ZooKeeperProperties zooKeeperProperties;
 
     /**
      * 前置强化方法
@@ -22,8 +31,21 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
      */
     @Override
     public void before(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
-        Point point = (Point) bean;
-        logger.info("定时任务" + point.getSuperScheduledName() + "开始执行");
+        boolean exists = zk.exists(zooKeeperProperties.getZkParentNodePath());
+
+        if (exists) {
+            List<String> children = zk.getChildren(zooKeeperProperties.getZkParentNodePath());
+            if (children != null && children.size() > 0) {
+                Collections.sort(children);
+                if (zooKeeperProperties.getZkPath().equals(zooKeeperProperties.getZkParentNodePath() + '/' + children.get(0))) {
+                    return;
+                }
+            } else {
+                throw new SuperScheduledException("zookeeper连接出现异常");
+            }
+            context.setCallOff(true);
+            context.setCallOffRemark("任务已交由其他服务运行");
+        }
     }
 
     /**
@@ -36,8 +58,6 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
      */
     @Override
     public void after(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
-        Point point = (Point) bean;
-        logger.info("定时任务" + point.getSuperScheduledName() + "执行结束");
     }
 
     /**
@@ -63,7 +83,7 @@ public class ExecutionFlagStrengthen implements BaseStrengthen {
      */
     @Override
     public void afterFinally(Object bean, Method method, Object[] args, ScheduledRunningContext context) {
-
     }
 
 }
+

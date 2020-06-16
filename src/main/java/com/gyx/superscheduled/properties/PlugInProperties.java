@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class PlugInProperties {
     private Boolean executionFlag = false;
     private Boolean executionLog = false;
+    private Boolean colony = false;
     private String logPath = "";
 
     public Boolean getExecutionFlag() {
@@ -30,5 +31,13 @@ public class PlugInProperties {
 
     public void setLogPath(String logPath) {
         this.logPath = logPath;
+    }
+
+    public Boolean getColony() {
+        return colony;
+    }
+
+    public void setColony(Boolean colony) {
+        this.colony = colony;
     }
 }
