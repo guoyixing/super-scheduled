@@ -83,10 +83,14 @@ public class SuperScheduledAutoConfiguration {
             if (!zk.exists(ZooKeeperConstant.ROOT_PATH)) {
                 zk.createPersistent(ZooKeeperConstant.ROOT_PATH);
             }
-            String zkPath = zk.createEphemeralSequential(ZooKeeperConstant.ROOT_PATH + ZooKeeperConstant.COLONY_STRENGTHEN
+            if (!zk.exists(ZooKeeperConstant.ROOT_PATH+"/"+plugInProperties.getColonyName())) {
+                zk.createPersistent(ZooKeeperConstant.ROOT_PATH+"/"+plugInProperties.getColonyName());
+            }
+
+            String zkPath = zk.createEphemeralSequential(ZooKeeperConstant.ROOT_PATH +"/"+plugInProperties.getColonyName()+ ZooKeeperConstant.COLONY_STRENGTHEN
                     , InetAddress.getLocalHost().getHostAddress());
             zooKeeperProperties.setZkPath(zkPath);
-            zooKeeperProperties.setZkParentNodePath(ZooKeeperConstant.ROOT_PATH);
+            zooKeeperProperties.setZkParentNodePath(ZooKeeperConstant.ROOT_PATH+"/"+plugInProperties.getColonyName());
         } catch (IOException e) {
             e.printStackTrace();
         }

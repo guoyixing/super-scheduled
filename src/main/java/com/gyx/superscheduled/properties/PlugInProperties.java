@@ -8,6 +8,7 @@ public class PlugInProperties {
     private Boolean executionLog = false;
     private Boolean colony = false;
     private String logPath = "";
+    private String colonyName = "colony";
 
     public Boolean getExecutionFlag() {
         return executionFlag;
@@ -39,5 +40,13 @@ public class PlugInProperties {
 
     public void setColony(Boolean colony) {
         this.colony = colony;
+    }
+
+    public String getColonyName() {
+        return colonyName;
+    }
+
+    public void setColonyName(String colonyName) {
+        this.colonyName = colonyName;
     }
 }
