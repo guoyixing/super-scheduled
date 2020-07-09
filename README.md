@@ -6,7 +6,7 @@ SpringBoot的定时任务的加强工具，实现定时任务动态管理,完全
 <dependency>
     <groupId>com.github.guoyixing</groupId>
     <artifactId>spring-boot-starter-super-scheduled</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
 </dependency>
 ```
 ## 原理说明
